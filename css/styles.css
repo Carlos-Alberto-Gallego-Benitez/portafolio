@@ -10268,3 +10268,12 @@ header div .size-na{
     display: none;
   }
 }
+
+.img-personal{
+  height: 305px;
+  width: 234px;
+  background-repeat: no-repeat;
+  background-position: 57%;
+  border-radius: 50%;
+  background-size: 81% auto;
+}
