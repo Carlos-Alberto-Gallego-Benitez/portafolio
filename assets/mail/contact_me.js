@@ -26,7 +26,7 @@ $(function () {
                 data: {
                     name: name,
                     phone: phone,
-                    email: email,
+                    email: 'carlosalgabez.08@gmail.com',
                     message: message,
                 },
                 cache: false,
@@ -87,3 +87,5 @@ $(function () {
 $("#name").focus(function () {
     $("#success").html("");
 });
+
+
