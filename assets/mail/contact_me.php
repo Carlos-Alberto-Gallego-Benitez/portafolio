@@ -1,22 +1,51 @@
 <?php
-// Check for empty fields
-if(empty($_POST['name']) || empty($_POST['email']) || empty($_POST['phone']) || empty($_POST['message']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-  http_response_code(500);
-  exit();
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'PHPMailer/Exception.php';
+require 'PHPMailer/PHPMailer.php';
+require 'PHPMailer/SMTP.php';
+$correo='carlosalgabez.08@gmail.com'
+$name=$_POST['name'];
+$phone=$_POST['phone'];
+$message=$_POST['message'];
+
+$mail = new PHPMailer(true);
+
+try {
+
+  $mail->SMTPOptions = array(
+		'ssl' => array(
+		'verify_peer' => false,
+		'verify_peer_name' => false,
+		'allow_self_signed' => true
+		)
+	);
+    //Server settings
+    $mail->SMTPDebug = 0;                      // Enable verbose debug output
+    $mail->isSMTP();                                            // Send using SMTP
+    $mail->Host       = 'smtp.gmail.com';                    // Set the SMTP server to send through
+    $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
+    $mail->Username   = 'noreplayrecupera99@gmail.com';                     // SMTP username
+    $mail->Password   = 'neongomez10';                               // SMTP password
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
+    $mail->Port       = 587;                                    // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+
+    //Recipients
+    $mail->setFrom('noreplayrecupera99@gmail.com', 'NEON GOMEZ');
+    $mail->addAddress($correo, 'Usuario');     // Add a recipient
+    
+  
+    // Content
+    $mail->isHTML(true);                                  // Set email format to HTML
+    $mail->Subject = 'Recuperar Contrasena Avisos Neon';
+    $mail->Body    = 'Señor usuario, avisos NEÓN le comunica, que en el sigiente link puede recuperar su contraseña <b><a href="http://localhost/neonGomez/recuperar/index">Recuperar contraseña</a> <br> <h2>Recuerde que somos su tienda de confianza fabricamos tu imaginación</h2></b> <br> <h1>AVISOS NEÓN</h1>';
+
+    $mail->send();
+  
+    //echo"<script>setTimeout(\"location.href='http://localhost/neonGomez/usuario/validationExito'\",100)</script>";
+  } catch (Exception $e) {
+
+    return $e.toString();
+    //echo"<script>setTimeout(\"location.href='http://localhost/neonGomez/usuario/validationFailed'\",100)</script>";
 }
-
-$name = strip_tags(htmlspecialchars($_POST['name']));
-$email = strip_tags(htmlspecialchars($_POST['email']));
-$phone = strip_tags(htmlspecialchars($_POST['phone']));
-$message = strip_tags(htmlspecialchars($_POST['message']));
-
-// Create the email and send the message
-$to = "yourname@yourdomain.com"; // Add your email address in between the "" replacing yourname@yourdomain.com - This is where the form will send a message to.
-$subject = "Website Contact Form:  $name";
-$body = "You have received a new message from your website contact form.\n\n"."Here are the details:\n\nName: $name\n\nEmail: $email\n\nPhone: $phone\n\nMessage:\n$message";
-$header = "From: noreply@yourdomain.com\n"; // This is the email address the generated message will be from. We recommend using something like noreply@yourdomain.com.
-$header .= "Reply-To: $email";	
-
-if(!mail($to, $subject, $body, $header))
-  http_response_code(500);
-?>
